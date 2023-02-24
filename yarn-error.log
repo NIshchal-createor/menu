@@ -1,0 +1,62 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Users\Nischal\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js
+
+PATH: 
+  C:\Program Files\Microsoft\jdk-11.0.12.7-hotspot\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Applications\Git\cmd;C:\ProgramData\chocolatey\bin;;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\dotnet\;C:\Program Files\nodejs\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\160\Tools\Binn\;C:\Program Files\Microsoft SQL Server\160\Tools\Binn\;C:\Program Files\Microsoft SQL Server\160\DTS\Binn\;C:\Users\Nischal\AppData\Local\Microsoft\WindowsApps;C:\Applications\Microsoft VS Code\bin;C:\Users\Nischal\AppData\Roaming\npm;C:\Users\Nischal\.dotnet\tools;C:\Program Files\MongoDB\Server\6.0\bin;
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  18.12.1
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: getaddrinfo ENOTFOUND registry.yarnpkg.com
+      at GetAddrInfoReqWrap.onlookup [as oncomplete] (node:dns:107:26)
+
+npm manifest: 
+  {
+    "name": "kbl-authentication",
+    "version": "1.0.0",
+    "description": "",
+    "main": "app.js",
+    "scripts": {
+      "dev": "nodemon app.js",
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "swagger-autogen": "node ./swagger.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+      "bcrypt": "^5.1.0",
+      "body-parser": "^1.20.1",
+      "cors": "^2.8.5",
+      "deep-email-validator": "^0.1.21",
+      "deep-email-validator-fix": "^0.1.22",
+      "dotenv": "^16.0.3",
+      "email-validator": "^2.0.4",
+      "express": "^4.18.1",
+      "jsonwebtoken": "^8.5.1",
+      "moment": "^2.29.4",
+      "mongoose": "^6.6.1",
+      "multer": "^1.4.5-lts.1",
+      "mysql": "^2.18.1",
+      "nodemailer": "^6.8.0",
+      "nodemon": "^2.0.20",
+      "pg": "^8.8.0",
+      "randomstring": "^1.2.3",
+      "swagger-autogen": "^2.22.0",
+      "swagger-ui-express": "^4.6.0",
+      "uuid": "^9.0.0"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
