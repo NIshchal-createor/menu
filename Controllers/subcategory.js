@@ -80,12 +80,12 @@ const updatesubcategory = async (req, res) => {
 const readAllSubCategory = async (req, res) => {
   try {
     const readAllSubCategoryCommand = await pool.query(
-      "SELECT c.category_name, s.subcategory_name, s.subcategory_image FROM category c JOIN subcategory s ON c.category_id = s.category_id "
+      "SELECT * FROM subcategory"
     );
     res.status(200).json({
       message: "Subcategory read sucessful",
       payload: {
-        subcategory: readAllSubCategoryCommand.rows[0],
+        subcategory: readAllSubCategoryCommand.rows,
       },
     });
   } catch (error) {
