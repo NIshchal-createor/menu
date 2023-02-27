@@ -2,23 +2,9 @@ const router = require("express").Router();
 const dishit = require("../controllers/menu");
 const multer = require("multer");
 const path = require("path");
+const { upload } = require("../utils/imgUpload");
 
-const storage = multer.diskStorage({
-  destination: (req, file, callback) => {
-    callback(null, "public/Dish_Images");
-  },
-  filename: (req, file, callback) => {
-    const image_name =
-      file.fieldname + Date.now() + path.extname(file.originalname);
-    callback(null, image_name);
-  },
-});
-
-const upload = multer({
-  storage: storage,
-});
-
-router.post("/adddish", upload.single("image"), dishit.addDish);
+router.post("/adddish", upload("Dish_Images").single("image"), dishit.addDish);
 
 router.get("/readallldish", dishit.readAllDish);
 router.get(
@@ -40,7 +26,11 @@ router.get("/read-onedish/:dish_id", dishit.readDish);
 router.delete("/deletedish/:dish_id", dishit.deleteDish);
 
 router.delete("/deletespecial/:special_id", dishit.deleteSpecialDish);
-router.put("/updatedish/:dish_id", upload.single("image"), dishit.updateDish);
+router.put(
+  "/updatedish/:dish_id",
+  upload("Dish_Images").single("image"),
+  dishit.updateDish
+);
 
 router.get("/like", dishit.dish_like);
 
