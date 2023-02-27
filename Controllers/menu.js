@@ -77,6 +77,10 @@ const readSubCategory = async (req, res) => {
           dish: readSubCategoryCommand.rows,
         },
       });
+    } else {
+      res.status(200).json({
+        message: "No subcateogory found",
+      });
     }
   } catch (error) {
     res.status(200).json(error);
