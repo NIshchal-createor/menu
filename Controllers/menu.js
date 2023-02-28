@@ -74,12 +74,15 @@ const readSubCategory = async (req, res) => {
       res.status(200).json({
         message: "Subcateogry fetched",
         payload: {
-          dish: readSubCategoryCommand.rows,
+          subcategory: readSubCategoryCommand.rows,
         },
       });
     } else {
-      res.status(200).json({
+      res.status(404).json({
         message: "No subcateogory found",
+        payload: {
+          subcategory: [],
+        },
       });
     }
   } catch (error) {
@@ -97,9 +100,16 @@ const readDishWithSubCategory = async (req, res) => {
 
     if (readDishCommand.rowCount > 0) {
       res.status(200).json({
-        message: "Dish Read Sucessful",
+        message: "Subcateogry fetched",
         payload: {
           dish: readDishCommand.rows,
+        },
+      });
+    } else {
+      res.status(404).json({
+        message: "No dish Found",
+        payload: {
+          dish: [],
         },
       });
     }
