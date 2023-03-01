@@ -6,12 +6,12 @@ const ping = async (req, res) => {
 };
 
 const addToCart = async (req, res) => {
-  const { dish_id } = req.body;
+  const { dish_id, table_id } = req.body;
   const cart_id = uuidv4();
   try {
     const { rowCount } = await pool.query(
-      "SELECT * FROM cart WHERE dish_id = $1",
-      [dish_id]
+      "SELECT * FROM cart WHERE dish_id = $1 AND table_id = $2",
+      [dish_id, table_id]
     );
 
     if (rowCount > 0) {
@@ -20,14 +20,19 @@ const addToCart = async (req, res) => {
       });
     } else {
       const addToCartCommand = await pool.query(
-        "INSERT INTO Cart (Cart_id, Dish_id, Quantity) VALUES ($1, $2, $3) returning *",
-        [cart_id, dish_id, 1]
+        "INSERT INTO Cart (Cart_id, Dish_id, Quantity, table_id) VALUES ($1, $2, $3, $4) returning *",
+        [cart_id, dish_id, 1, table_id]
       );
       if (addToCartCommand.rowCount > 0) {
+        const addedcart_id = addToCartCommand.rows[0].cart_id;
+        const readAddedDish = await pool.query(
+          "SELECT m.dish_id, m.dish_name, m.dish_price, m.dish_image, c.cart_id, c.quantity, c.table_id FROM menu m JOIN cart c ON m.dish_id = c.dish_id WHERE cart_id = $1",
+          [addedcart_id]
+        );
         return res.status(200).json({
           message: "Added to cart",
           payload: {
-            data: addToCartCommand.rows[0],
+            data: readAddedDish.rows[0],
           },
         });
       }
@@ -67,7 +72,7 @@ const decreaseDishQuantity = async (req, res) => {
   const { cart_id } = req.body;
   try {
     const { rowCount } = await pool.query(
-      "UPDATE cart SET quantity = quantity - 1  WHERE cart_id = $1 returning *",
+      "UPDATE cart SET quantity = quantity - 1  WHERE cart_id= $1 returning *",
       [cart_id]
     );
     if (rowCount > 0) {
@@ -90,15 +95,24 @@ const decreaseDishQuantity = async (req, res) => {
 };
 
 const readAllCart = async (req, res) => {
+  const { table_id } = req.body;
   try {
     const { rowCount, rows } = await pool.query(
-      "SELECT m.dish_name, m.dish_image, m.dish_price, c.cart_id, c.quantity FROM menu m JOIN cart c ON m.dish_id = c.dish_id "
+      "SELECT m.dish_name, m.dish_image, m.dish_price, c.cart_id, c.quantity FROM menu m JOIN cart c ON m.dish_id = c.dish_id WHERE table_id = $1",
+      [table_id]
     );
     if (rowCount > 0) {
       res.status(200).json({
         message: "Fetched All cart items",
         payload: {
           data: rows,
+        },
+      });
+    } else {
+      res.status(404).json({
+        message: "No Items in cart",
+        payload: {
+          data: [],
         },
       });
     }
@@ -108,11 +122,20 @@ const readAllCart = async (req, res) => {
 };
 
 const emptyCart = async (req, res) => {
+  const { table_id } = req.body;
   try {
-    const { rowCount, rows } = await pool.query("DELETE FROM cart returning *");
+    const { rowCount, rows } = await pool.query(
+      "DELETE FROM cart WHERE table_id = $1 returning *",
+      [table_id]
+    );
     if (rowCount > 0) {
       res.status(200).json({
         message: "Cart Emptied",
+        data: rows,
+      });
+    } else {
+      res.status(200).json({
+        message: "",
         data: rows,
       });
     }
@@ -122,16 +145,21 @@ const emptyCart = async (req, res) => {
 };
 
 const deleteDish = async (req, res) => {
-  const { cart_id } = req.body;
+  const { dish_id, table_id } = req.body;
   try {
     const { rowCount, rows } = await pool.query(
-      "DELETE FROM cart WHERE cart_id = $1 returning *",
-      [cart_id]
+      "DELETE FROM cart WHERE dish_id = $1 AND table_id = $2 returning *",
+      [dish_id, table_id]
     );
     if (rowCount > 0) {
       res.status(200).json({
         message: "Dish deleted from cart",
-        data: rows[0],
+        deletedDish: rows[0],
+      });
+    } else {
+      res.status(404).json({
+        message: "Item to be deleted is not present",
+        deletedDish: [],
       });
     }
   } catch (error) {
